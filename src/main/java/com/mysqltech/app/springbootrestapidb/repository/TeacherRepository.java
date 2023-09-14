@@ -1,0 +1,7 @@
+package com.mysqltech.app.springbootrestapidb.repository;
+
+import com.mysqltech.app.springbootrestapidb.model.Teacher;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TeacherRepository extends JpaRepository<Teacher, Long> {
+}
