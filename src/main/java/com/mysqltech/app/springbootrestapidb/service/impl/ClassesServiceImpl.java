@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ClassesServiceImpl implements ClassesService {
@@ -22,8 +23,9 @@ public class ClassesServiceImpl implements ClassesService {
         this.classesRepository = classesRepository;
     }
 
+
     @Override
-    public Classes addClass(Classes classes, long id) {
+    public Classes addClass(Classes classes, UUID id) {
         Classes toReturn = teacherRepository.findById(id).map((teacher -> {
             classes.setTeacher(teacher);
             return this.classesRepository.save(classes);
@@ -32,14 +34,29 @@ public class ClassesServiceImpl implements ClassesService {
     }
 
     @Override
+    public List<Classes> getAllCLassesOfTeacher(UUID id) {
+        if (!teacherRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Classes","Not found Tutorial with id = " , id);
+        }
+        List<Classes> classes = classesRepository.findByTeacherId(id);
+        return classes;
+    }
+
+    @Override
     public List<Classes> getAllClasses() {
         return this.classesRepository.findAll();
     }
 
     @Override
-    public Classes addStudentToClass(long classId, long studentId) {
+    public Classes updateClass(UUID classId, Classes classRequest) {
+        Classes classes = classesRepository.findById(classId)
+                .orElseThrow(() -> new ResourceNotFoundException( "CLASS","Class id not found ",classId));
 
-        return null;
+        classes.setStudent(classRequest.getStudent());
+        classes.setRoomNumber(classRequest.getRoomNumber());
+        classes.setPeriod(classRequest.getSubject());
+        classes.setTeacher(classRequest.getTeacher());
+        return classesRepository.save(classes);
     }
 
 

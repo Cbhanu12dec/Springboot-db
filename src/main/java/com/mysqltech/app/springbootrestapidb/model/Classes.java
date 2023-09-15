@@ -8,25 +8,28 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
-@Table(name="Classes")
+@Table(name="CLASSES")
 public class Classes {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name="ID")
+    private UUID id;
 
-    @Column(name = "className")
-    private String className;
+    @Column(name = "ROOM_NUMBER")
+    private String roomNumber;
+    @Column(name = "SUBJECT")
+    private String subject;
 
-    @Column(name="period")
+    @Column(name="PERIOD")
     private String period;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "teacherId", nullable = false)
+    @JoinColumn(name = "TEACHER_ID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Teacher teacher;
@@ -36,25 +39,34 @@ public class Classes {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             })
-    @JoinTable(name = "Student_classes",
-            joinColumns = { @JoinColumn(name = "class_id") },
-            inverseJoinColumns = { @JoinColumn(name = "student_id") })
+    @JoinTable(name = "STUDENT_CLASSES",
+            joinColumns = { @JoinColumn(name = "CLASS_ID") },
+            inverseJoinColumns = { @JoinColumn(name = "STUDENT_ID") })
     private Set<Student> student = new HashSet<>();
 
-    public long getId() {
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public String getClassName() {
-        return className;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getPeriod() {
@@ -86,7 +98,7 @@ public class Classes {
         student.getClasses().add(this);
     }
 
-    public void removeStudent(long studentId) {
+    public void removeStudent(UUID studentId) {
         Student student1 = this.student.stream().filter(t -> t.getId() == studentId).findFirst().orElse(null);
         if (student1 != null) {
             this.student.remove(student1);

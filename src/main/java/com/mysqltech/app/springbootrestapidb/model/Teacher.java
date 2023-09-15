@@ -1,27 +1,29 @@
 package com.mysqltech.app.springbootrestapidb.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Entity
-@Table(name = "teachers")
+@Table(name = "TEACHERS")
 @NoArgsConstructor
 public class Teacher {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "ID")
+    private UUID id;
 
-    @Column(name = "firstName")
+    @Column(name = "FIRST_NAME")
     private String firstName;
 
-    @Column(name="lastName")
+    @Column(name="LAST_NAME")
     private String lastName;
 
-    @Column(name="role")
-    private String role;
+    @Column(name="TITLE")
+    private String title;
 }

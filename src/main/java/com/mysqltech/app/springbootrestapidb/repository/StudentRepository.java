@@ -3,6 +3,8 @@ package com.mysqltech.app.springbootrestapidb.repository;
 import com.mysqltech.app.springbootrestapidb.model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StudentRepository extends JpaRepository<Student, Long> {
+import java.util.UUID;
+
+public interface StudentRepository extends JpaRepository<Student, UUID> {
 
 }

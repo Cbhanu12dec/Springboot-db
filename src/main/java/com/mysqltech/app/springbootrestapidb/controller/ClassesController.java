@@ -2,9 +2,6 @@ package com.mysqltech.app.springbootrestapidb.controller;
 
 
 import com.mysqltech.app.springbootrestapidb.model.Classes;
-import com.mysqltech.app.springbootrestapidb.model.Student;
-import com.mysqltech.app.springbootrestapidb.model.Teacher;
-import com.mysqltech.app.springbootrestapidb.repository.TeacherRepository;
 import com.mysqltech.app.springbootrestapidb.service.ClassesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/class")
@@ -27,8 +24,12 @@ public class ClassesController {
         this.classesService = classesService;
     }
 
+
+    /*
+            ADD CLASS WITH TEACHER ID AS CLASS WILL EXSISTS WITH TEACHER
+     */
     @PostMapping("/{id}")
-    public ResponseEntity<Classes> addClass(@RequestBody Classes classes ,@PathVariable("id") long id){
+    public ResponseEntity<Classes> addClass(@RequestBody Classes classes ,@PathVariable("id") UUID id){
         return new ResponseEntity<Classes>(this.classesService.addClass(classes, id), HttpStatus.CREATED);
     }
 
@@ -37,12 +38,27 @@ public class ClassesController {
         return new ResponseEntity<>(this.classesService.getAllClasses(), HttpStatus.OK);
     }
 
-    // add students to class
 
-    // /api/class/:classID/student/:studentID
-    @PostMapping("/:classID/student/:studentID")
-    public ResponseEntity<Classes> addClassToStudent(@PathVariable("classID") long classID, @PathVariable("studentID") long studentID){
-        return new ResponseEntity<Classes>(this.classesService.addStudentToClass(classID, studentID), HttpStatus.CREATED);
+    /*
+
+            GET ALL CLASSES OF SPECIFIC TEACHER
+     */
+
+    @GetMapping("/{teacherId}/classes")
+    public ResponseEntity<List<Classes>> getAllClassesByTeacherId(@PathVariable(value = "teacherId") UUID teacherId) {
+        return new ResponseEntity<>(this.classesService.getAllCLassesOfTeacher(teacherId), HttpStatus.OK);
+    }
+
+
+    /*
+
+               Update a comment by id
+               API:  PUT /api/comments/:id
+     */
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Classes> updateClasses(@PathVariable("id") UUID id, @RequestBody Classes classesRequest) {
+        return new ResponseEntity<>(this.classesService.updateClass(id, classesRequest), HttpStatus.OK);
     }
 
 

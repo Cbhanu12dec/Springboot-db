@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/student")
@@ -28,7 +29,7 @@ public class StudentController {
     //add student along with class
 
     @PostMapping("/{classId}/add")
-    public ResponseEntity<Student> addStudentAlongWithClass(@PathVariable("classId") long classId, @RequestBody Student student){
+    public ResponseEntity<Student> addStudentAlongWithClass(@PathVariable("classId") UUID classId, @RequestBody Student student){
         return new ResponseEntity<>(this.studentService.addStudentWithClass(classId, student), HttpStatus.CREATED);
     }
 

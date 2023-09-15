@@ -1,7 +1,6 @@
 package com.mysqltech.app.springbootrestapidb.service.impl;
 
 import com.mysqltech.app.springbootrestapidb.exception.ResourceNotFoundException;
-import com.mysqltech.app.springbootrestapidb.model.Classes;
 import com.mysqltech.app.springbootrestapidb.model.Student;
 import com.mysqltech.app.springbootrestapidb.repository.ClassesRepository;
 import com.mysqltech.app.springbootrestapidb.repository.StudentRepository;
@@ -9,10 +8,7 @@ import com.mysqltech.app.springbootrestapidb.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -37,11 +33,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student addStudentWithClass(long classId, Student student) {
+    public Student addStudentWithClass(UUID classId, Student student) {
         Student modifiedStudent = classesRepository.findById(classId).map((classes -> {
-            long studentID = student.getId();
+            UUID studentID = student.getId();
 
-            if(studentID != 0L){
+            if(studentID != null){
                 Student updatedStudent = studentRepository.findById(studentID).orElseThrow(()-> new ResourceNotFoundException("Employee", "Id", studentID));
                 classes.addStudent(updatedStudent);
                 classesRepository.save(classes);
